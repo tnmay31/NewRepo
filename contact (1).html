@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Organic Farming Hub">
+    <title>Organic Farming Hub | Contact</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f5f2e8;
+            color: #2d3e2b;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #2c5e2a;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+        }
+
+        #hamburger_checkbox {
+            display: none;
+        }
+
+        label[for="hamburger_checkbox"] {
+            cursor: pointer;
+            display: none;
+        }
+
+        #hamburger_image {
+            width: 32px;
+            filter: brightness(0) invert(1);
+        }
+
+        nav {
+            display: flex;
+            gap: 1.8rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav a:hover, .active_nav {
+            border-bottom-color: #f9a26c;
+        }
+
+        footer {
+            background: #1f3b1e;
+            color: #ddd;
+            text-align: center;
+            padding: 1.2rem;
+            margin-top: auto;
+        }
+
+        #contact_form {
+            max-width: 680px;
+            margin: 3rem auto;
+            background: white;
+            padding: 2rem 2.5rem;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
+        }
+
+        #contact_form h2 {
+            font-size: 2rem;
+            color: #2c5e2a;
+            margin-bottom: 1.2rem;
+            border-left: 6px solid #f9a26c;
+            padding-left: 1rem;
+        }
+
+        #contact_form label {
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        #contact_form input, 
+        #contact_form textarea {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 1px solid #ccc8b5;
+            border-radius: 40px;
+            background: #fefcf7;
+            font-family: inherit;
+        }
+
+        #contact_form textarea {
+            border-radius: 24px;
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        .button-container button {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            background: #2c5e2a;
+            color: white;
+        }
+
+        .button-container button[type="reset"] {
+            background: #b9b28a;
+            color: #2d3e2b;
+        }
+
+        .form-status {
+            margin-top: 1.5rem;
+            padding: 0.8rem;
+            border-radius: 60px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .form-status.success {
+            background: #dcfce7;
+            color: #15803d;
+            display: block;
+        }
+
+        .form-status.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+
+        @media (max-width: 700px) {
+            #contact_form {
+                margin: 2rem 1rem;
+                padding: 1.5rem;
+            }
+            label[for="hamburger_checkbox"] {
+                display: inline-block;
+                position: absolute;
+                top: 1.2rem;
+                right: 1.2rem;
+            }
+            nav {
+                flex-direction: column;
+                width: 100%;
+                background: #1f4a1d;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            #hamburger_checkbox:checked + nav {
+                max-height: 260px;
+                padding: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Organic Farming Hub</h1> 
+        
+    <form id="contact_form">
+        <h2>Contact Us</h2>
+        
+        <label for="name">🌱 Name:</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required>
+        
+        <label for="email">📧 Email:</label>
+        <input type="email" id="email" name="email" placeholder="Your email" required>
+        
+        <label for="message">📝 Message:</label>
+        <textarea id="message" name="message" placeholder="Tell us about organic farming..." required></textarea>
+        
+        <div class="button-container">
+            <button type="submit" id="submitBtn">Send Message ✨</button>
+            <button type="reset">Clear Form</button>
+        </div>
+        <div id="formFeedback" class="form-status"></div>
+    </form>
+
+    <footer>
+        <p>Organic Farming Hub &copy; Chisholm | Growing a greener future 🌾</p>      
+    </footer>
+
+    <!-- EmailJS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <script>
+        // ============================================
+        // REPLACE THESE 3 WITH YOUR ACTUAL KEYS:
+        // ============================================
+        const EMAILJS_PUBLIC_KEY = "Tiz3OwSYFkLA3a6lv";
+        const EMAILJS_SERVICE_ID = "service_ftfyyye";
+        const EMAILJS_TEMPLATE_ID = "template_vh8qnqp";
+        
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+        
+        // Get form elements
+        const form = document.getElementById('contact_form');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const messageInput = document.getElementById('message');
+        const feedbackDiv = document.getElementById('formFeedback');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        function showStatus(message, isSuccess) {
+            feedbackDiv.textContent = message;
+            feedbackDiv.className = `form-status ${isSuccess ? 'success' : 'error'}`;
+            setTimeout(() => {
+                feedbackDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        function isValidEmail(email) {
+            return /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(email);
+        }
+        
+        // Form submit handler
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            // Get values
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const message = messageInput.value.trim();
+            
+            // Validation
+            if (!name) {
+                showStatus("❌ Please enter your name", false);
+                nameInput.focus();
+                return;
+            }
+            if (!email || !isValidEmail(email)) {
+                showStatus("❌ Please enter a valid email address", false);
+                emailInput.focus();
+                return;
+            }
+            if (!message || message.length < 5) {
+                showStatus("❌ Please enter a message (at least 5 characters)", false);
+                messageInput.focus();
+                return;
+            }
+            
+            // Check if EmailJS is configured
+            if (EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY_HERE") {
+                showStatus("⚠️ EmailJS not configured yet. Please add your keys in the JavaScript code.", false);
+                return;
+            }
+            
+            // Disable button
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Sending... 🌿";
+            showStatus("⏳ Sending your message...", false);
+            
+            // IMPORTANT: These variable names MUST match your EmailJS template
+            const templateParams = {
+                name: name,           // matches {{name}} in template
+                email: email,         // matches {{email}} in template
+                message: message,     // matches {{message}} in template
+                title: "Organic Farming Inquiry"  // matches {{title}} in template
+            };
+            
+            try {
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    templateParams
+                );
+                console.log("Success:", response);
+                showStatus("✅ Message sent successfully! We'll reply within 24 hours.", true);
+                form.reset();
+            } catch (error) {
+                console.error("Error:", error);
+                showStatus("❌ Failed to send. Error: " + (error.text || "Check console"), false);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Send Message ✨";
+            }
+        });
+        
+        // Clear feedback on reset
+        form.querySelector('button[type="reset"]').addEventListener('click', () => {
+            setTimeout(() => {
+                feedbackDiv.style.display = 'none';
+            }, 10);
+        });
+        
+        console.log("✅ Form ready! Fill in your EmailJS keys to start sending emails.");
+    </script>
+</body>
+</html>
